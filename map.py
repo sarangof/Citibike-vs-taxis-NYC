@@ -4,7 +4,7 @@ import sys
 import datetime
 import geopandas as gp
 
-zipcodes = gp.read_file('NYCzipcodeshapefile2.geojson') # IMPORT FROM SYS
+zipcodes = gp.read_file('NYCzipcodeshapefile2.geojson') # ??? How should we import this best?
 
 for line in sys.stdin:
 	l = line.strip().split(',') #header condition
