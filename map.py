@@ -14,6 +14,8 @@ for line in sys.stdin:
 		pt_origin = gp.geoseries.Point(float(l[10],float(l[11])) # column order
 		pickup_time = datetime.datetime.strptime(l[1],"%Y-%m-%d %H:%M:%S")
 		dropoff_time = datetime.datetime.strptime(l[2],"%Y-%m-%d %H:%M:%S")
+		c = dropoff_time-pickup_time
+		trip_duration = divmod(c.days* 86400 + c.seconds,60)
 
 #		for x,z in enumerate(zipcodes['geometry']):
 #    			if pt.intersects(z):
