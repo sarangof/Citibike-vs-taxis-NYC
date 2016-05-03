@@ -4,18 +4,29 @@ import sys
 import datetime
 import geopandas as gp
 
-zipcodes = gp.read_file('/home/saf537/BigDataTaxisNYC/NYCzipcodeshapefile2.geojson') # ??? How should we import this best?
+zipcodes = gp.read_file('/user/saf537/FinalProject/NYCzipcodeshapefile2.geojson') # ??? How should we import this best?
 
 for line in sys.stdin:
 	l = line.strip().split(',') #header condition
-	if len(l) == 19: #Figure this out
+	pt_origin = gp.geoseries.Point(float(l[10]),float(l[11])) # column order
+	print "%s \t %d" % (pt_origin,1)
+#	pickup_time = datetime.datetime.strptime(l[1],"%Y-%m-%d %H:%M:%S")
+#	dropoff_time = datetime.datetime.strptime(l[2],"%Y-%m-%d %H:%M:%S")
+#	c = dropoff_time-pickup_time
+#	trip_duration = divmod(c.days* 86400 + c.seconds,60)
+#	for x,z in enumerate(zipcodes['geometry']):
+#		if pt.intersects(z):
+#			zip_origin = zipcodes['postalCode']
+#			break
+
+#	if len(l) == 19: #Figure this out
 #		# taxis
 		# pickup_time = 1, dropoff_time = 2, dropoff_longitude = 10, dropoff_latitude = 11, pickup_longitude = 5, pickup_latitude = 64
-		pt_origin = gp.geoseries.Point(float(l[10],float(l[11])) # column order
-		pickup_time = datetime.datetime.strptime(l[1],"%Y-%m-%d %H:%M:%S")
-		dropoff_time = datetime.datetime.strptime(l[2],"%Y-%m-%d %H:%M:%S")
-		c = dropoff_time-pickup_time
-		trip_duration = divmod(c.days* 86400 + c.seconds,60)
+#		pt_origin = gp.geoseries.Point(float(l[10],float(l[11])) # column order
+#		pickup_time = datetime.datetime.strptime(l[1],"%Y-%m-%d %H:%M:%S")
+#		dropoff_time = datetime.datetime.strptime(l[2],"%Y-%m-%d %H:%M:%S")
+#		c = dropoff_time-pickup_time
+#		trip_duration = divmod(c.days* 86400 + c.seconds,60)
 
 #		for x,z in enumerate(zipcodes['geometry']):
 #    			if pt.intersects(z):
