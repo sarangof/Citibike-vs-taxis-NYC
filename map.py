@@ -4,7 +4,7 @@ import sys
 import datetime
 import geopandas as gp
 
-zipcodes = gp.read_file('/user/saf537/FinalProject/NYCzipcodeshapefile2.geojson') # ??? How should we import this best?
+zipcodes = gp.read_file('NYCzipcodeshapefile2.geojson') # ??? How should we import this best?
 
 for line in sys.stdin:
 	l = line.strip().split(',') #header condition
@@ -27,6 +27,23 @@ for line in sys.stdin:
         	        if pt_destin.intersects(z):
 				zip_destin = zipcodes['postalCode'][x]
 				break
-		print "%s|%s\t%d"% (str(zip_origin),str(zip_destin),trip_duration) #Very careful, formatting.
+		print "%s&%s|%s\t%d"% ("taxi",zip_origin,zip_destin,trip_duration) #Very careful, formatting.
 
 
+        #Citibike
+        elif ((len(l) == 15) & (l[0] != 'tripduration') & (count <= 3)):
+		pt_origin = gp.geoseries.Point(float(l[6]),float(l[5]))
+		
+		# Origin   
+		for x, z in enumerate(zipcodes['geometry']):
+			if pt_origin.intersects(z):
+				zip_origin = zipcodes['postalCode'][x]
+				break
+		# Destination:
+		pt_destin = gp.geoseries.Point(float(l[10]),float(l[9]))
+		for x, z in enumerate(zipcodes['geometry']):
+			if pt_destin.intersects(z):
+				zip_destin = zipcodes['postalCode'][x]
+				break
+		
+		print "%s&%s|%s\t%d"% ("citibike",zip_origin,zip_destin,l[0]) 
