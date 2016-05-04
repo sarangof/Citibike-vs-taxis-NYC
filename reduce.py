@@ -3,21 +3,25 @@
 import sys
 import datetime
 
-
-current_time = 0
+current_duration = 0.
+current_key = None
+current_count = 0
 
 # input comes from STDIN (stream data that goes to the program)
 for line in sys.stdin:
-	word, count = line.strip().split("\t", 1)
+	mode, zip_origin, zip_destin, duration = line.strip().split("\t", 1)
+	key = "%s\t%s\t%s" % (mode,zip_origin,zip_destin)	
 	try:
-		count = int(count)
+		duration = int(duration)
 	except ValueError:
 		continue
 
-	current_sum += count
+	if key == current_key:
+		current_count += 1
+		current_duration += duration
 	else:
-		if current_word:
-			# output goes to STDOUT (stream data that the program writes)
-			print "%s\t%d" % (current_word, current_sum )
-			current_word = word
-			current_sum = count
+		if current_key:
+			print "%s\t%s" % (key, current_duration)
+			current_duration = 0.
+			current_key = key
+			

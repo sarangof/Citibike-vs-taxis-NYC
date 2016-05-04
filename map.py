@@ -4,44 +4,49 @@ import sys
 import datetime
 import geopandas as gp
 
-zipcodes = gp.read_file('/user/saf537/FinalProject/NYCzipcodeshapefile2.geojson') # ??? How should we import this best?
+zipcodes = gp.read_file('NYCzipcodeshapefile2.geojson') # ??? How should we import this best?
 
 for line in sys.stdin:
 	l = line.strip().split(',') #header condition
-	pt_origin = gp.geoseries.Point(float(l[10]),float(l[11])) # column order
-	print "%s \t %d" % (pt_origin,1)
-#	pickup_time = datetime.datetime.strptime(l[1],"%Y-%m-%d %H:%M:%S")
-#	dropoff_time = datetime.datetime.strptime(l[2],"%Y-%m-%d %H:%M:%S")
-#	c = dropoff_time-pickup_time
-#	trip_duration = divmod(c.days* 86400 + c.seconds,60)
-#	for x,z in enumerate(zipcodes['geometry']):
-#		if pt.intersects(z):
-#			zip_origin = zipcodes['postalCode']
-#			break
 
-#	if len(l) == 19: #Figure this out
-#		# taxis
-		# pickup_time = 1, dropoff_time = 2, dropoff_longitude = 10, dropoff_latitude = 11, pickup_longitude = 5, pickup_latitude = 64
-#		pt_origin = gp.geoseries.Point(float(l[5],float(l[6])) # column order
-#		pickup_time = datetime.datetime.strptime(l[1],"%Y-%m-%d %H:%M:%S")
-#		dropoff_time = datetime.datetime.strptime(l[2],"%Y-%m-%d %H:%M:%S")
-#		c = dropoff_time-pickup_time
-#		trip_duration = divmod(c.days* 86400 + c.seconds,60)
+	if ((len(l) == 19) & (l[0] != 'VendorID')):
 
-#		for x,z in enumerate(zipcodes['geometry']):
-#    			if pt_origin.intersects(z):
-#        			zip_origin = zipcodes['postalCode']1
-#				break
-#		pt_destin = gp.geoseries.Point(l[9].l[10]) # column order
-#		for x,z in enumerate(zipcodes['geometry']):
-#    			if pt_destin.intersects(z):
-#        			zip_destin = zipcodes['postalCode']
-#				break
-#		try l.start_time - l.end_time: #Good condition here # column order
-#			print "%s\t%d"% (str(zip_origin)+str(zip_destin),l.start_time - l.end_time) #Very careful, formatting. # column order
-#	elif len(l)==15: #Figure this out
-#		#bicycles
-#		try l.start_time - l.end_time: #Good condition here
-#			print "%s\t%d"% (str(zip_origin)+str(zip_destin),l.start_time - l.end_time) #Very careful, formatting.
+	        pt_origin = gp.geoseries.Point(float(l[5]),float(l[6])) # column order
+        	pt_destin = gp.geoseries.Point(float(l[9]),float(l[10]))
+        	pickup_time = datetime.datetime.strptime(l[1],"%Y-%m-%d %H:%M:%S")
+	        dropoff_time = datetime.datetime.strptime(l[2],"%Y-%m-%d %H:%M:%S")
+
+		try:
+			c = dropoff_time - pickup_time
+			trip_duration = c.total_seconds()#divmod(c.days*86400 + c.seconds,60)
+		except ValueError:
+			continue
+
+	        for x, z in enumerate(zipcodes['geometry']):
+			if pt_origin.intersects(z):
+				zip_origin = zipcodes['postalCode'][x]
+				break
+		for x, z in enumerate(zipcodes['geometry']):
+        	        if pt_destin.intersects(z):
+				zip_destin = zipcodes['postalCode'][x]
+				break
+		print "%s\t%s\t%s\t%s"% ("taxi",zip_origin,zip_destin,trip_duration) #Very careful, formatting.
 
 
+        #Citibike
+        elif ((len(l) == 15) & (l[0] != 'tripduration')):
+		pt_origin = gp.geoseries.Point(float(l[6]),float(l[5]))
+		
+		# Origin   
+		for x, z in enumerate(zipcodes['geometry']):
+			if pt_origin.intersects(z):
+				zip_origin = zipcodes['postalCode'][x]
+				break
+		# Destination:
+		pt_destin = gp.geoseries.Point(float(l[10]),float(l[9]))
+		for x, z in enumerate(zipcodes['geometry']):
+			if pt_destin.intersects(z):
+				zip_destin = zipcodes['postalCode'][x]
+				break
+		
+		print "%s\t%s\t%s\t%s"% ("citibike",zip_origin,zip_destin,l[0]) 
