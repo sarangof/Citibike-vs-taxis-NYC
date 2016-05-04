@@ -30,11 +30,13 @@ for line in sys.stdin:
         	        if pt_destin.intersects(z):
 				zip_destin = zipcodes['postalCode'][x]
 				break
+
 		print "%s\t%s\t%s\t%s"% ("taxi",zip_origin,zip_destin,trip_duration) #Very careful, formatting.
 
 
         #Citibike
         elif ((len(l) == 15) & (l[0] != 'tripduration')):
+
 		pt_origin = gp.geoseries.Point(float(l[6]),float(l[5]))
 		
 		# Origin   
@@ -49,4 +51,6 @@ for line in sys.stdin:
 				zip_destin = zipcodes['postalCode'][x]
 				break
 		
+
 		print "%s\t%s\t%s\t%s"% ("citibike",zip_origin,zip_destin,l[0]) 
+
