@@ -9,7 +9,6 @@ current_count = 0
 
 # input comes from STDIN (stream data that goes to the program)
 for line in sys.stdin:
-	print(line)
 	key, duration = line.strip().split("\t")
 	try:
 		duration = int(duration)
@@ -22,6 +21,7 @@ for line in sys.stdin:
 	else:
 		if current_key:
 			print "%s\t%s" % (key, current_duration)
-			current_duration = 0.
-			current_key = key
+		current_duration = duration
+		current_key = key
+		
 			
