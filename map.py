@@ -10,6 +10,7 @@ for line in sys.stdin:
 	l = line.strip().split(',') #header condition
 
 	if ((len(l) == 19) & (l[0] != 'VendorID')):
+		print("Taxis")
 
 	        pt_origin = gp.geoseries.Point(float(l[5]),float(l[6])) # column order
         	pt_destin = gp.geoseries.Point(float(l[9]),float(l[10]))
@@ -36,7 +37,7 @@ for line in sys.stdin:
 
         #Citibike
         elif ((len(l) == 15) & (l[0] != 'tripduration')):
-
+		print("Bikes")
 		pt_origin = gp.geoseries.Point(float(l[6]),float(l[5]))
 		
 		# Origin   
