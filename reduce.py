@@ -9,7 +9,7 @@ current_count = 0
 
 # input comes from STDIN (stream data that goes to the program)
 for line in sys.stdin:
-	mode, zip_origin, zip_destin, duration = line.strip().split("\t", 1)
+	mode, zip_origin, zip_destin, duration = line.strip().split("\t")
 	key = "%s\t%s\t%s" % (mode,zip_origin,zip_destin)	
 	try:
 		duration = int(duration)
