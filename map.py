@@ -31,7 +31,7 @@ for line in sys.stdin:
 				zip_destin = zipcodes['postalCode'][x]
 				break
 
-		print "%s\t%s\t%s\t%.2f"% ("taxi",zip_origin,zip_destin,trip_duration) #Very careful, formatting.
+		print "%s\t%.2f"% (str(zip_origin)+str(zip_destin)+"|"+"taxis",trip_duration) #Very careful, formatting.
 
 
         #Citibike
@@ -53,7 +53,7 @@ for line in sys.stdin:
 
 		try:
                         l[0] = float(l[0])
-			print "%s\t%s\t%s\t%.2f"% ("citibike",zip_origin,zip_destin,l[0])
+			print "%s\t%.2f"% (str(zip_origin)+str(zip_destin)+"|"+"citibike",l[0]) #Very careful, formatting.
 
                 except ValueError:
                         continue
