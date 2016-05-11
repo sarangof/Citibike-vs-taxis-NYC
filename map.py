@@ -5,6 +5,10 @@ import datetime
 import geopandas as gp
 
 zipcodes = gp.read_file('NYCzipcodeshapefile2.geojson') # ??? How should we import this best?
+g=open('./input_files/uniqueCitiBikeZips.txt')
+uniqueCBikeZips = g.read().split('\t')
+uniqueCBikeZips = uniqueCBikeZips[:-1]
+uniqueCBikeZips = map(int, uniqueCBikeZips)
 
 for line in sys.stdin:
 	l = line.strip().split(',') #header condition
@@ -30,8 +34,12 @@ for line in sys.stdin:
         	        if pt_destin.intersects(z):
 				zip_destin = zipcodes['postalCode'][x]
 				break
-
-		print "%s\t%.2f"% (str(zip_origin)+str(zip_destin)+"|"+"taxis",trip_duration) #Very careful, formatting.
+                try:
+                        trip_duration = int(trip_duration)
+			if zip_origin in uniqueCBikeZips and zip_destin in uniqueCBikeZips:
+				print "%s\t%s"% (str(zip_origin)+str(zip_destin)+"|"+"taxis",trip_duration) #Very careful, formatting.
+		except ValueError:
+			continue		
 
 
         #Citibike
@@ -52,8 +60,8 @@ for line in sys.stdin:
 				break
 
 		try:
-                        l[0] = float(l[0])
-			print "%s\t%.2f"% (str(zip_origin)+str(zip_destin)+"|"+"citibike",l[0]) #Very careful, formatting.
+                        l[0] = int(l[0])
+			print "%s\t%s"% (str(zip_origin)+str(zip_destin)+"|"+"citibike",l[0]) #Very careful, formatting.
 
                 except ValueError:
                         continue
