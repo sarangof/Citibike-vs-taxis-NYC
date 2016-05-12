@@ -20,45 +20,41 @@ for line in sys.stdin:
         	pickup_time = datetime.datetime.strptime(l[1],"%Y-%m-%d %H:%M:%S")
 	        dropoff_time = datetime.datetime.strptime(l[2],"%Y-%m-%d %H:%M:%S")
 
-		try:
-			c = dropoff_time - pickup_time
-			trip_duration = c.total_seconds()#divmod(c.days*86400 + c.seconds,60)
-			if pickup_time.weekday in [0,4] and (pickup_time.hour in [7,9] or pickup_time.hour in [16,18]):
-				rush_flag = "rush"
-			elif pickup_time.weekday in [0,4]:
-				rush_flag = "valley"
-			else:
-				rush_flag = None
-			
-			if rush_flag:
-
-				except ValueError:
-					continue
-
-			        for x, z in enumerate(zipcodes['geometry']):
-					if pt_origin.intersects(z):
-						zip_origin = zipcodes['postalCode'][x]
-						break
-				for x, z in enumerate(zipcodes['geometry']):
-        			        if pt_destin.intersects(z):
-						zip_destin = zipcodes['postalCode'][x]
-						break
-		                try:
-        		                trip_duration = int(trip_duration)
-					#print int(zip_origin)
-					#print int(zip_destin)
-					if int(zip_origin) in uniqueCBikeZips and int(zip_destin) in uniqueCBikeZips:
-						print "%s\t%s"% (str(zip_origin)+str(zip_destin)+"|"+"taxis"+"&"+rush_flag,trip_duration)
-				except ValueError:
-					continue		
+		trip_duration = c.total_seconds()#divmod(c.days*86400 + c.seconds,60)
+		if pickup_time.weekday() in [0,4] and (pickup_time.hour in [7,9] or pickup_time.hour in [16,18]):
+			rush_flag = "rush"
+		elif pickup_time.weekday() in [0,4]:
+			rush_flag = "valley"
+		else:
+			rush_flag = None
+		
+		if rush_flag:
+	                try:
+                        	c = dropoff_time - pickup_time
+			except ValueError:
+				continue
+			for x, z in enumerate(zipcodes['geometry']):
+				if pt_origin.intersects(z):
+					zip_origin = zipcodes['postalCode'][x]
+					break
+			for x, z in enumerate(zipcodes['geometry']):
+        		        if pt_destin.intersects(z):
+					zip_destin = zipcodes['postalCode'][x]
+					break
+		        try:
+				trip_duration = int(trip_duration)
+				if int(zip_origin) in uniqueCBikeZips and int(zip_destin) in uniqueCBikeZips:
+					print "%s\t%s"% (str(zip_origin)+str(zip_destin)+"|"+"taxis"+"&"+rush_flag,trip_duration)
+			except ValueError:
+				continue		
 
         #Citibike
 	elif ((len(l) == 15) & (l[0] != 'tripduration')):
 		if l[12] == 'Subscriber':
 			pickup_time = datetime.datetime.strptime(l[1],"%m/%d/%Y %H:%M")
-			if pickup_time.weekday in [0,4] and (pickup_time.hour in [7,9] or pickup_time.hour in [16,18]):
+			if pickup_time.weekday() in [0,4] and (pickup_time.hour in [7,9] or pickup_time.hour in [16,18]):
 				rush_flag = "rush"
-			elif pickup_time.weekday in [0,4]:
+			elif pickup_time.weekday() in [0,4]:
 				rush_flag = "valley"
 			else:
 				rush_flag = None
