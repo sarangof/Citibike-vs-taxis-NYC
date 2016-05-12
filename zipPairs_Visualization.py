@@ -61,7 +61,9 @@ plt.ylabel("Total time difference [s] between taxis and Citi Bikes.")
 
 import pandas as pd
 Total_trips = pd.DataFrame({"Citi Bike": [val[2] for val in dict_total.values()], "Taxi":[val[3] for val in dict_total.values()]},columns=["Citi Bike","Taxi"])
-
+    
+print "Mean for Citi bike: "+str(np.mean([val[2] for val in dict_total.values()]))
+print "Mean for Taxis: " +str(np.mean([val[3] for val in dict_total.values()]))
 
 ax = sns.boxplot(Total_trips,palette="Set3")
 ax.set_ylim(0,5000)
@@ -93,7 +95,8 @@ for item in pairs[:-1]:
     else:
         if cnt == 4 and len(set(mode_list))==2:
             # citibike&rush, citibike&valley, taxis&rush, taxis&valley 
-            dict_rush[zip_pair_pre] = [['rush','valley'],  [100*((float(tm_list[-4:][2]) - float(tm_list[-4:][0]) )/ float(tm_list[-4:][2]) ),100*((float(tm_list[-4:][3]) - float(tm_list[-4:][1]) )/ float(tm_list[-4:][3]) ) ] , dist_dict[zip_pair_pre]] #100*((float(tm_list[-2:][1]) - float(tm_list[-2:][0]) )/ float(tm_list[-2:][1])) 
+            # Taxi - Citi bike rush, Taxi - Citi Bike non rush
+            dict_rush[zip_pair_pre] = [['rush','valley'],  float(tm_list[-4:][2]) - float(tm_list[-4:][0]),float(tm_list[-4:][3]) - float(tm_list[-4:][1])  , dist_dict[zip_pair_pre]] #100*((float(tm_list[-2:][1]) - float(tm_list[-2:][0]) )/ float(tm_list[-2:][1])) 
             print("Si")
             tm_list = []
             mode_list = []
@@ -103,10 +106,26 @@ for item in pairs[:-1]:
     mode_list.append(mode)
 
 
+plt.vlines([val[3] for val in dict_rush.values()], [0],[val[1] for val in dict_rush.values()],color='blue')
+plt.xlabel("Distance between zip codes in rush hour")
+plt.ylabel("Total time difference [s] between taxis and Citi Bikes in rush hour.")
+
+plt.vlines([val[3] for val in dict_rush.values()], [0],[val[2] for val in dict_rush.values()],color='red')
+plt.xlabel("Distance between zip codes in non rush hour")
+plt.ylabel("Total time difference [s] between taxis and Citi Bikes in non rush hour hour.")
+
+print "Mean difference in rush hour: "+str(np.mean([val[1] for val in dict_rush.values()]))
+print "Mean difference in non rush hour: " +str(np.mean([val[2] for val in dict_rush.values()]))
+
+plt.hist([val[1] for val in dict_rush.values()])
+plt.xlabel("Difference between taxis and bicycles in rush hour.")
+
+plt.hist([val[2] for val in dict_rush.values()])
+plt.xlabel("Difference between taxis and bicycles in non rush hour.")
 
 """
 
-Crete pairs for weekend day vs-night scenarios.
+Create pairs for weekend day vs-night scenarios.
 
 """
     
@@ -128,8 +147,8 @@ for item in pairs[:-1]:
         cnt += 1
     else:
         if cnt == 4 and len(set(mode_list))==2:
-            # citibike&rush, citibike&valley, taxis&rush, taxis&valley 
-            dict_weekend[zip_pair_pre] = [['day','night'],  [100*((float(tm_list[-4:][2]) - float(tm_list[-4:][0]) )/ float(tm_list[-4:][2]) ),100*((float(tm_list[-4:][3]) - float(tm_list[-4:][1]) )/ float(tm_list[-4:][3]) ) ], dist_dict[zip_pair_pre] ] #100*((float(tm_list[-2:][1]) - float(tm_list[-2:][0]) )/ float(tm_list[-2:][1])) 
+            # citibike&day, citibike&night, taxis&day, taxis&night  
+            dict_weekend[zip_pair_pre] = [['day','night'],  float(tm_list[-4:][2]) - float(tm_list[-4:][0]) ,float(tm_list[-4:][3]) - float(tm_list[-4:][1]), dist_dict[zip_pair_pre] ] #100*((float(tm_list[-2:][1]) - float(tm_list[-2:][0]) )/ float(tm_list[-2:][1])) 
             print("Si")
             tm_list = []
             mode_list = []
@@ -138,6 +157,22 @@ for item in pairs[:-1]:
     tm_list.append(av_time)
     mode_list.append(mode)
     
+plt.vlines([val[3] for val in dict_weekend.values()], [0],[val[1] for val in dict_weekend.values()],color='blue')
+plt.xlabel("Distance between zip codes during daytime in Saturdays.")
+plt.ylabel("Total time difference [s] between taxis and Citi Bikes during daytime in Saturdays.")
+
+plt.vlines([val[3] for val in dict_weekend.values()], [0],[val[2] for val in dict_weekend.values()],color='red')
+plt.xlabel("Distance between zip codes on Saturday nights.")
+plt.ylabel("Total time difference [s] between taxis and Citi Bikes on Saturday nights.")
+
+print "Mean difference on Saturday daytime: "+str(np.mean([val[1] for val in dict_weekend.values()]))
+print "Mean difference on Saturday night: " +str(np.mean([val[2] for val in dict_weekend.values()]))
+
+plt.hist([val[1] for val in dict_weekend.values()])
+plt.xlabel("Difference between taxis and bicycles on Saturday daytime.")
+
+plt.hist([val[2] for val in dict_weekend.values()])
+plt.xlabel("Difference between taxis and bicycles on Saturday night.")
 
 # -- Save dictionaries in json files  
   
