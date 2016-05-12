@@ -7,6 +7,7 @@ Created on Wed May 11 23:59:22 2016
 
 import seaborn as sns
 import matplotlib.pyplot as plt 
+import numpy as np
      
 # This is a mockup of what would be **Jiheng's list**.
      
@@ -41,7 +42,10 @@ for item in pairs[:-1]:
         cnt += 1
     else:
         if cnt == 2 and len(set(mode_list))==2:
-            dict_total[zip_pair_pre] = [100*((float(tm_list[-2:][1]) - float(tm_list[-2:][0]) )/ float(tm_list[-2:][1])), dist_dict[zip_pair_pre] ]
+            # Taxis - Citi bike
+            #dict_total[zip_pair_pre] = [100*((float(tm_list[-2:][1]) - float(tm_list[-2:][0]) )/ float(tm_list[-2:][1])), dist_dict[zip_pair_pre] ]
+            # Structure of the dictionay values: difference (taxis - bikes), distance, Citi Bike time, Taxi time.            
+            dict_total[zip_pair_pre] = [float(tm_list[-2:][1]) - float(tm_list[-2:][0]) , dist_dict[zip_pair_pre] ,float(tm_list[-2:][0]) ,float(tm_list[-2:][1])]
             print("Si")
             tm_list = []
             mode_list = []
@@ -50,7 +54,19 @@ for item in pairs[:-1]:
     tm_list.append(av_time)
     mode_list.append(mode)
 
-plt.vlines([val[1] for val in dict_total.values()], [0],[val[0] for val in dict_total.values()])
+plt.vlines([val[1] for val in dict_total.values()], [0],[val[0] for val in dict_total.values()],color='blue')
+plt.xlabel("Distance between zip codes")
+plt.ylabel("Total time difference [s] between taxis and Citi Bikes.")
+
+
+import pandas as pd
+Total_trips = pd.DataFrame({"Citi Bike": [val[2] for val in dict_total.values()], "Taxi":[val[3] for val in dict_total.values()]},columns=["Citi Bike","Taxi"])
+
+
+ax = sns.boxplot(Total_trips,palette="Set3")
+ax.set_ylim(0,5000)
+ax.set( ylabel= "Distribution of times [s].")
+
 
 """
 
