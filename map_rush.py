@@ -13,17 +13,15 @@ uniqueCBikeZips = map(int, uniqueCBikeZips)
 rush_flag = None
 
 for line in sys.stdin:
-	l = line.strip().split(',') #header condition
+	l = line.strip().split(',') 
 	if ((len(l) == 19) & (l[0] != 'VendorID')):
-	        pt_origin = gp.geoseries.Point(float(l[5]),float(l[6])) # column order
+	        pt_origin = gp.geoseries.Point(float(l[5]),float(l[6])) 
         	pt_destin = gp.geoseries.Point(float(l[9]),float(l[10]))
         	pickup_time = datetime.datetime.strptime(l[1],"%Y-%m-%d %H:%M:%S")
 	        dropoff_time = datetime.datetime.strptime(l[2],"%Y-%m-%d %H:%M:%S")
-
-		trip_duration = c.total_seconds()#divmod(c.days*86400 + c.seconds,60)
-		if pickup_time.weekday() in [0,4] and (pickup_time.hour in [7,9] or pickup_time.hour in [16,18]):
+		if int(pickup_time.weekday()) in range(0,4) and (int(pickup_time.hour) in range(7,9) or int(pickup_time.hour) in range(16,18)):
 			rush_flag = "rush"
-		elif pickup_time.weekday() in [0,4]:
+		elif int(pickup_time.weekday()) in range(0,4):
 			rush_flag = "valley"
 		else:
 			rush_flag = None
@@ -31,6 +29,7 @@ for line in sys.stdin:
 		if rush_flag:
 	                try:
                         	c = dropoff_time - pickup_time
+				trip_duration = c.total_seconds()
 			except ValueError:
 				continue
 			for x, z in enumerate(zipcodes['geometry']):
@@ -52,9 +51,9 @@ for line in sys.stdin:
 	elif ((len(l) == 15) & (l[0] != 'tripduration')):
 		if l[12] == 'Subscriber':
 			pickup_time = datetime.datetime.strptime(l[1],"%m/%d/%Y %H:%M")
-			if pickup_time.weekday() in [0,4] and (pickup_time.hour in [7,9] or pickup_time.hour in [16,18]):
+			if int(pickup_time.weekday()) in range(0,4) and (int(pickup_time.hour) in range(7,9) or int(pickup_time.hour) in range(16,18)):
 				rush_flag = "rush"
-			elif pickup_time.weekday() in [0,4]:
+			elif int(pickup_time.weekday()) in range(0,4):
 				rush_flag = "valley"
 			else:
 				rush_flag = None
@@ -84,4 +83,3 @@ for line in sys.stdin:
 				
 	                	except ValueError:
 					continue
-
