@@ -25,13 +25,12 @@ Our main finding is that in average, the longer the distance of the travel, the 
 ![HW1_1](https://github.com/sarangof/BigDataTaxisNYC/blob/master/plots/Rush_difference_detail.png) 
 Total time difference.
 
-For more information regarding methods and results, please refer to: https://docs.google.com/document/d/1rCXrWBu7yBdaN905Gg6dNiYEn9mB1As-vGPwrrS726k/edit?usp=sharing
-
-![2]
-(https://github.com/sarangof/Citibike-vs-taxis-NYC/blob/master/plots/nonRush_difference_detail.png)
+![2](https://github.com/sarangof/Citibike-vs-taxis-NYC/blob/master/plots/nonRush_difference_detail.png)
 Non rush hour
 
-![3]
-(https://github.com/sarangof/Citibike-vs-taxis-NYC/blob/master/plots/Rush_difference_detail.png)
+![3](https://github.com/sarangof/Citibike-vs-taxis-NYC/blob/master/plots/Rush_difference_detail.png)
 Rush hour
+
+
+For more information regarding methods and results, please refer to: https://docs.google.com/document/d/1rCXrWBu7yBdaN905Gg6dNiYEn9mB1As-vGPwrrS726k/edit?usp=sharing
 
