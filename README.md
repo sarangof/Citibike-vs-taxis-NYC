@@ -22,7 +22,7 @@ Our main finding is that in average, the longer the distance of the travel, the 
 * Citi Bike system data: January, May and September of 2015.
 * TLC yellow cab data for the same periods described above.
 
-![HW1_1](https://github.com/sarangof/BigDataTaxisNYC/blob/master/plots/Rush_difference_detail.png) 
+![HW1_1](https://github.com/sarangof/BigDataTaxisNYC/blob/master/plots/total.png) 
 Total time difference.
 
 ![2](https://github.com/sarangof/Citibike-vs-taxis-NYC/blob/master/plots/nonRush_difference_detail.png)
